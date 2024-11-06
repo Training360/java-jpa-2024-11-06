@@ -20,15 +20,20 @@ public class EmployeesSelectMain {
 
         //language=sql
         String select = """
-                        select emp_name from employees
+                        select emp_name from employees where emp_name like ?
                         """;
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(select);
-             ResultSet rs = preparedStatement.executeQuery()
+
         ) {
-            while (rs.next()) {
-                System.out.println(rs.getString("emp_name"));
+            // Comment: clean code szempontjából a törzset érdemes lenne metódusba kiszervezni!
+//            preparedStatement.setFetchSize();
+            preparedStatement.setString(1, "John%");
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    System.out.println(rs.getString("emp_name"));
+                }
             }
         } catch (SQLException ex) {
             throw new RuntimeException("DB error", ex);

@@ -21,13 +21,16 @@ public class EmployeesInsertMain {
 
         //language=sql
         String insert = """
-                        insert into employees values (nextval('seq_employees'), 'John Doe')
+                        insert into employees values (nextval('seq_employees'), ?)
                         """;
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement preparedStatement = conn.prepareStatement(insert)
         ) {
             System.out.println("Name: " + conn.getClass().getName());
+
+            preparedStatement.setString(1, "Jack Doe");
+
             int count = preparedStatement.executeUpdate();
             System.out.println("Count: " + count);
         } catch (SQLException ex) {
