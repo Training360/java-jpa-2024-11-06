@@ -1,14 +1,13 @@
 package employees;
 
-import org.postgresql.ds.PGPoolingDataSource;
 import org.postgresql.ds.PGSimpleDataSource;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class EmployeesInsertMain {
+public class EmployeesSelectMain {
 
     public static void main(String[] args) {
         // 1. DataSource: hozzáférési adatokat tárolja
@@ -20,16 +19,17 @@ public class EmployeesInsertMain {
         dataSource.setPassword("employees");
 
         //language=sql
-        String insert = """
-                        insert into employees values (nextval('seq_employees'), 'John Doe')
+        String select = """
+                        select emp_name from employees
                         """;
 
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement preparedStatement = conn.prepareStatement(insert)
+             PreparedStatement preparedStatement = conn.prepareStatement(select);
+             ResultSet rs = preparedStatement.executeQuery()
         ) {
-            System.out.println("Name: " + conn.getClass().getName());
-            int count = preparedStatement.executeUpdate();
-            System.out.println("Count: " + count);
+            while (rs.next()) {
+                System.out.println(rs.getString("emp_name"));
+            }
         } catch (SQLException ex) {
             throw new RuntimeException("DB error", ex);
         }
