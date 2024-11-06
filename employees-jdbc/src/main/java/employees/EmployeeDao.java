@@ -38,9 +38,28 @@ public class EmployeeDao {
     }
 
     @SneakyThrows
+    public void saveAll(List<Employee> employees) {
+        try (
+                Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(
+                        "insert into employees(id, emp_name) values (nextval('seq_employees'), ?)")
+        ) {
+            conn.setAutoCommit(false);
+
+
+            for (Employee employee : employees) {
+                stmt.setString(1, employee.name());
+                stmt.executeUpdate();
+            }
+
+            conn.commit();
+        }
+    }
+
+    @SneakyThrows
     public List<Employee> findAll() {
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("select id, emp_name from employees");
+             PreparedStatement stmt = conn.prepareStatement("select id, emp_name from employees order by emp_name limit 100");
              ResultSet rs = stmt.executeQuery()
         ) {
             List<Employee> employees = new ArrayList<>();
