@@ -2,6 +2,8 @@ package employees;
 
 import org.postgresql.ds.PGSimpleDataSource;
 
+import java.util.List;
+
 public class EmployeeApp {
 
     public static void main(String[] args) {
@@ -11,6 +13,10 @@ public class EmployeeApp {
         dataSource.setPassword("employees");
 
         EmployeeDao employeeDao = new EmployeeDao(dataSource);
-        employeeDao.save(new Employee(null, "John Doe"));
+        Employee employee = employeeDao.save(new Employee(null, "John Doe"));
+        System.out.println(employee);
+
+        List<Employee> employees = employeeDao.findAll();
+        System.out.println(employees);
     }
 }
