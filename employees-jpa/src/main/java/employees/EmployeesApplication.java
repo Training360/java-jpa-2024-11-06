@@ -24,7 +24,7 @@ public class EmployeesApplication {
 
             System.out.println(employee.getId());
 
-            employeesDao.delete(employee.getId());
+//            employeesDao.delete(employee.getId());
 
             // JPQL
             List<Employee> employees = employeesDao.findAll();

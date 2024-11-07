@@ -3,6 +3,8 @@ package employees;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -18,6 +20,18 @@ public class Employee {
 
     @Column(name = "emp_name")
     private String name;
+
+    @Column(name = "employee_status")
+//    @Enumerated(EnumType.STRING)
+    @Convert(converter = EmployeeStatusConverter.class)
+    private EmployeeStatus employeeStatus = EmployeeStatus.NEW;
+
+    @Lob
+    @Column
+    private String cv = "lorem ipsum";
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     public Employee(String name) {
         this.name = name;
