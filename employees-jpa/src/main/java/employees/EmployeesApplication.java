@@ -15,11 +15,20 @@ public class EmployeesApplication {
 
             EmployeesDao employeesDao = new EmployeesDao(entityManagerFactory);
 
-            employeesDao.save(new Employee("John Doe"));
+            Employee employee = new Employee("John Doe");
+            employeesDao.save(employee);
+
+            System.out.println(employee.getId());
+
+            employee = employeesDao.findById(employee.getId());
+
+            System.out.println(employee.getId());
+
+            employeesDao.delete(employee.getId());
 
             // JPQL
             List<Employee> employees = employeesDao.findAll();
-            employees.stream().map(Employee::getName).forEach(System.out::println);
+            employees.stream().map(Employee::getId).forEach(System.out::println);
         }
 
     }
