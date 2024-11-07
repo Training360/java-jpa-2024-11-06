@@ -21,7 +21,10 @@ class EmployeeDaoTest {
         dataSource.setUser("employees");
         dataSource.setPassword("employees");
 
-        Flyway flyway = Flyway.configure().dataSource(dataSource).load();
+        Flyway flyway = Flyway.configure()
+                .cleanDisabled(false)
+//                .loadDefaultConfigurationFiles()
+                .dataSource(dataSource).load();
         flyway.clean();
         flyway.migrate();
 
