@@ -11,9 +11,14 @@ public class EmployeesApplication {
     public static void main(String[] args) {
         try (
                 EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("pu");
-                EntityManager em = entityManagerFactory.createEntityManager()) {
+                ) {
+
+            EmployeesDao employeesDao = new EmployeesDao(entityManagerFactory);
+
+            employeesDao.save(new Employee("John Doe"));
+
             // JPQL
-            List<Employee> employees = em.createQuery("select e from Employee e", Employee.class).getResultList();
+            List<Employee> employees = employeesDao.findAll();
             employees.stream().map(Employee::getName).forEach(System.out::println);
         }
 

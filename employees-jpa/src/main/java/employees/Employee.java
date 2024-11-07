@@ -12,8 +12,8 @@ import lombok.*;
 public class Employee {
 
     @Id
-    @GeneratedValue(generator = "employee_seq")
-    @SequenceGenerator(name = "employee_seq", sequenceName = "seq_employee")
+    @GeneratedValue(generator = "employees_seq")
+    @SequenceGenerator(name = "employees_seq", sequenceName = "seq_employees")
     private Long id;
 
     @Column(name = "emp_name")
