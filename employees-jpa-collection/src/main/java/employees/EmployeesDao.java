@@ -36,10 +36,10 @@ public class EmployeesDao {
 
     public List<Employee> findAllWithNicknames() {
         try (EntityManager em = emf.createEntityManager()) {
-            List<Employee> employees = em.createQuery("select e from Employee e", Employee.class).getResultList();
-            for (Employee e: employees) {
-                e.getNicknames().size();
-            }
+            List<Employee> employees = em.createQuery("select e from Employee e left join fetch e.nicknames", Employee.class).getResultList();
+//            for (Employee e: employees) {
+//                e.getNicknames().size();
+//            }
             return employees;
         }
     }
@@ -53,10 +53,13 @@ public class EmployeesDao {
 
     public Employee findByIdWithNicknames(long id) {
         try (EntityManager em = emf.createEntityManager()) {
-            Employee employee = em.find(Employee.class, id);
+//            Employee employee = em.find(Employee.class, id);
             // Azért hívom meg, hogy betöltse a collectiont
-            employee.getNicknames().size();
-            return employee;
+//            employee.getNicknames().size();
+
+            return em.createQuery("select e from Employee e left join fetch e.nicknames where e.id = :id", Employee.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
         }
     }
 

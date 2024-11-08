@@ -26,6 +26,7 @@ public class EmployeesApplication {
             System.out.println(employee.getNicknames());
 
             List<Employee> employees = employeesDao.findAllWithNicknames();
+            System.out.println(employees.size());
             employees.forEach(e -> System.out.println(e.getNicknames()));
         }
 
