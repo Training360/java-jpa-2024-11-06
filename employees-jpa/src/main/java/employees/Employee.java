@@ -31,9 +31,23 @@ public class Employee {
     private String cv = "lorem ipsum";
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
+
+    @Column(name = "created_by")
+    private String createdBy;
 
     public Employee(String name) {
         this.name = name;
+    }
+
+    @PrePersist
+    private void setAuditData() {
+        this.createdAt = LocalDateTime.now();
+        this.createdBy = "admin";
+    }
+
+    @PostPersist
+    private void logPostPersist() {
+        System.out.println("post persist");
     }
 }

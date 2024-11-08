@@ -17,7 +17,13 @@ public class EmployeesDao {
     public void save(Employee employee) {
             try (EntityManager em = emf.createEntityManager()) {
                 em.getTransaction().begin();
+
+                System.out.println("before persist: " + em.contains(employee));
+
                 em.persist(employee);
+
+                System.out.println("after persist: " + em.contains(employee));
+
                 em.getTransaction().commit();
             }
     }
@@ -30,14 +36,30 @@ public class EmployeesDao {
 
     public Employee findById(long id) {
         try (EntityManager em = emf.createEntityManager()) {
-            return em.find(Employee.class, id);
+            System.out.println("first find");
+            Employee employee = em.find(Employee.class, id);
+            em.detach(employee);
+            em.clear();
+
+            System.out.println("second find");
+            employee = em.find(Employee.class, id);
+
+            return employee;
+        }
+    }
+
+    public void approve(ApproveCommand command) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            Employee entity = em.find(Employee.class, command.employeeId());
+            entity.setEmployeeStatus(EmployeeStatus.ACCEPTED);
+            em.getTransaction().commit();
         }
     }
 
     public void update(Employee employee) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-
             Employee entity = em.find(Employee.class, employee.getId());
             entity.setName(employee.getName());
             em.getTransaction().commit();
