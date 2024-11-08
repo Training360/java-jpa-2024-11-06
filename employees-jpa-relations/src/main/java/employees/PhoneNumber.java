@@ -25,9 +25,8 @@ public class PhoneNumber {
     @ManyToOne
     private Employee employee;
 
-    public PhoneNumber(String type, String number, Employee employee) {
+    public PhoneNumber(String type, String number) {
         this.type = type;
         this.number = number;
-        this.employee = employee;
     }
 }

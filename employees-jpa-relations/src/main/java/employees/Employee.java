@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,14 +38,18 @@ public class Employee {
     @Column(name = "created_by")
     private String createdBy;
 
+    // OneToOne, ManyToOne eager
+    // OneToMany, ManyToMany lazy
+
     // Owner side
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private ParkingPlace parkingPlace;
 
     // Alkalmazottnak milyen saját telefonszámai
     // Inverse side
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
-    private List<PhoneNumber> phoneNumbers;
+//    @OrderBy("number")
+    private List<PhoneNumber> phoneNumbers = new ArrayList<>();
 
     public Employee(String name) {
         this.name = name;
@@ -59,5 +64,10 @@ public class Employee {
     @PostPersist
     private void logPostPersist() {
         System.out.println("post persist");
+    }
+
+    public void addPhoneNumber(PhoneNumber phoneNumber) {
+        phoneNumbers.add(phoneNumber);
+        phoneNumber.setEmployee(this);
     }
 }

@@ -1,6 +1,5 @@
 package employees;
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
@@ -20,13 +19,15 @@ public class EmployeesApplication {
             ParkingPlace parkingPlace = new ParkingPlace(100);
             employee.setParkingPlace(parkingPlace);
 
-            PhoneNumber phoneNumberHome = new PhoneNumber("home", "1111", employee);
-            PhoneNumber phoneNumberWork = new PhoneNumber("work", "2222", employee);
-            employee.setPhoneNumbers(new ArrayList<>(List.of(phoneNumberHome, phoneNumberWork)));
+            PhoneNumber phoneNumberHome = new PhoneNumber("home", "1111");
+            PhoneNumber phoneNumberWork = new PhoneNumber("work", "2222");
+            employee.addPhoneNumber(phoneNumberHome);
+            employee.addPhoneNumber(phoneNumberWork);
 
             employeesDao.save(employee);
 
-            PhoneNumber phoneNumber = new PhoneNumber("mobile", "3333", employee);
+            PhoneNumber phoneNumber = new PhoneNumber("mobile", "3333");
+            employee.addPhoneNumber(phoneNumber);
             employeesDao.save(phoneNumber);
 
 //            employee.getPhoneNumbers().add();
@@ -34,8 +35,11 @@ public class EmployeesApplication {
 
             System.out.println(employee.getPhoneNumbers().size());
 
-            Employee employee2 = employeesDao.findById(employee.getId());
+            Employee employee2 = employeesDao.findByIdWithPhoneNumbers(employee.getId());
             System.out.println(employee2.getPhoneNumbers().size());
+
+
+            employeesDao.addPhoneNumber(employee2.getId(), new PhoneNumber("weekend", "4444"));
         }
 
     }

@@ -2,7 +2,6 @@ package employees;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 
 import java.util.List;
 
@@ -51,6 +50,13 @@ public class EmployeesDao {
         }
     }
 
+    public Employee findByIdWithPhoneNumbers(long id) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("select e from Employee e left join fetch e.phoneNumbers", Employee.class)
+                    .getSingleResult();
+        }
+    }
+
     public void approve(ApproveCommand command) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -74,6 +80,27 @@ public class EmployeesDao {
             em.getTransaction().begin();
             Employee employee = em.find(Employee.class, id);
             em.remove(employee);
+            em.getTransaction().commit();
+        }
+    }
+
+    public void addPhoneNumber(long id, PhoneNumber phoneNumber) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+
+//            Employee employee = em.find(Employee.class, id);
+//            employee.addPhoneNumber(phoneNumber);
+
+            Employee employee = em.getReference(Employee.class, id);
+            System.out.println(employee.getClass().getName());
+
+            System.out.println(employee.getName());
+
+            System.out.println(employee.getClass().getName());
+
+            phoneNumber.setEmployee(employee);
+            em.persist(phoneNumber);
+
             em.getTransaction().commit();
         }
     }
