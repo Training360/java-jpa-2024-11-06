@@ -1,10 +1,10 @@
 package employees;
 
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 import java.util.List;
+import java.util.Set;
 
 public class EmployeesApplication {
 
@@ -17,17 +17,13 @@ public class EmployeesApplication {
 
             for (int i = 0; i < 10; i++) {
                 Employee employee = new Employee("John Doe " + i);
-                employee.setNicknames(List.of("John", "Johnny", "J", "JD"));
+                employee.setNicknames(Set.of("John", "Johnny", "J", "JD"));
+                employee.setPhones(Set.of("111", "222", "333", "444"));
                 employeesDao.save(employee);
             }
 
-            Employee employee = employeesDao.findByIdWithNicknames(1);
-            System.out.println(employee.getName());
-            System.out.println(employee.getNicknames());
-
-            List<Employee> employees = employeesDao.findAllWithNicknames();
-            System.out.println(employees.size());
-            employees.forEach(e -> System.out.println(e.getNicknames()));
+            List<Employee> employees = employeesDao.findAllWithNicknamesAndPhones();
+            employees.forEach(e -> System.out.println(e.getNicknames() + " " + e.getPhones()));
         }
 
     }

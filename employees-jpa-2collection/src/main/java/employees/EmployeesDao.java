@@ -2,7 +2,6 @@ package employees;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 
 import java.util.List;
 
@@ -41,6 +40,14 @@ public class EmployeesDao {
 //                e.getNicknames().size();
 //            }
             return employees;
+        }
+    }
+
+    public List<Employee> findAllWithNicknamesAndPhones() {
+        try (EntityManager em = emf.createEntityManager()) {
+            // Load left side
+            em.createQuery("select e from Employee e left join fetch e.nicknames", Employee.class).getResultList();
+            return em.createQuery("select e from Employee e left join fetch e.phones", Employee.class).getResultList();
         }
     }
 

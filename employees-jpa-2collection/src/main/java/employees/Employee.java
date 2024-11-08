@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -40,7 +40,11 @@ public class Employee {
     @ElementCollection// EZT A MEGOLDÁST SOHA NE HASZNÁLD! (fetch = FetchType.EAGER)
     @CollectionTable(name = "nicknames", joinColumns = @JoinColumn(name = "emp_id"))
     @Column(name = "nickname")
-    private List<String> nicknames;
+    private Set<String> nicknames;
+
+    @ElementCollection
+    @CollectionTable(name = "phones")
+    private Set<String> phones;
 
     public Employee(String name) {
         this.name = name;
