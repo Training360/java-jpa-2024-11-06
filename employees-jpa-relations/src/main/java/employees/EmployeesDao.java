@@ -14,16 +14,19 @@ public class EmployeesDao {
         this.emf = emf;
     }
 
+    public void save(PhoneNumber phoneNumber) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            em.persist(phoneNumber);
+            em.getTransaction().commit();
+        }
+    }
+
     public void save(Employee employee) {
             try (EntityManager em = emf.createEntityManager()) {
                 em.getTransaction().begin();
-
-                System.out.println("before persist: " + em.contains(employee));
-
+//                em.persist(employee.getParkingPlace());
                 em.persist(employee);
-
-                System.out.println("after persist: " + em.contains(employee));
-
                 em.getTransaction().commit();
             }
     }

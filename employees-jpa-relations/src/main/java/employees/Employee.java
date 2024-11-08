@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,6 +36,15 @@ public class Employee {
 
     @Column(name = "created_by")
     private String createdBy;
+
+    // Owner side
+    @OneToOne(cascade = CascadeType.ALL)
+    private ParkingPlace parkingPlace;
+
+    // Alkalmazottnak milyen saját telefonszámai
+    // Inverse side
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+    private List<PhoneNumber> phoneNumbers;
 
     public Employee(String name) {
         this.name = name;
