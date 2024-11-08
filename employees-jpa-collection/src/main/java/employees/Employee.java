@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,6 +36,9 @@ public class Employee {
 
     @Column(name = "created_by")
     private String createdBy;
+
+    @ElementCollection
+    private List<String> nicknames;
 
     public Employee(String name) {
         this.name = name;
