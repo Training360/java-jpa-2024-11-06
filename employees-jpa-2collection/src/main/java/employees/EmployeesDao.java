@@ -3,6 +3,7 @@ package employees;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeesDao {
@@ -43,11 +44,30 @@ public class EmployeesDao {
         }
     }
 
-    public List<Employee> findAllWithNicknamesAndPhones() {
+    public List<EmployeeDto> findAllWithNicknamesAndPhones() {
         try (EntityManager em = emf.createEntityManager()) {
             // Load left side
-            em.createQuery("select e from Employee e left join fetch e.nicknames", Employee.class).getResultList();
-            return em.createQuery("select e from Employee e left join fetch e.phones", Employee.class).getResultList();
+//            em.createQuery("select e from Employee e left join fetch e.nicknames", Employee.class).getResultList();
+//            return em.createQuery("select e from Employee e left join fetch e.phones", Employee.class).getResultList();
+
+            List<Employee> employees = em.createQuery("select e from Employee e where e.name like 'John%'", Employee.class).getResultList();
+//            for (Employee employee : employees) {
+//                employee.getNicknames().size();
+//                employee.getPhones().size();
+//            }
+//            return employees;
+
+            return employees
+                    .stream()
+                    .map(e -> {
+                        EmployeeDto employeeDto = new EmployeeDto(e.getId(), e.getName(),
+                                new ArrayList<>(e.getNicknames()),
+                                new ArrayList<>(e.getPhones()));
+                        System.out.println(e.getPhones().getClass());
+                        return employeeDto;
+                    })
+                    .toList();
+
         }
     }
 

@@ -2,8 +2,11 @@ package employees;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -40,11 +43,13 @@ public class Employee {
     @ElementCollection// EZT A MEGOLDÁST SOHA NE HASZNÁLD! (fetch = FetchType.EAGER)
     @CollectionTable(name = "nicknames", joinColumns = @JoinColumn(name = "emp_id"))
     @Column(name = "nickname")
-    private Set<String> nicknames;
+    @Fetch(FetchMode.SUBSELECT)
+    private List<String> nicknames;
 
     @ElementCollection
     @CollectionTable(name = "phones")
-    private Set<String> phones;
+    @Fetch(FetchMode.SUBSELECT)
+    private List<String> phones;
 
     public Employee(String name) {
         this.name = name;
