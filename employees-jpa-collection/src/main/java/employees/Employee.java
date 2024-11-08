@@ -37,7 +37,9 @@ public class Employee {
     @Column(name = "created_by")
     private String createdBy;
 
-    @ElementCollection
+    @ElementCollection// EZT A MEGOLDÁST SOHA NE HASZNÁLD! (fetch = FetchType.EAGER)
+    @CollectionTable(name = "nicknames", joinColumns = @JoinColumn(name = "emp_id"))
+    @Column(name = "nickname")
     private List<String> nicknames;
 
     public Employee(String name) {

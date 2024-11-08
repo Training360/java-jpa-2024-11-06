@@ -34,19 +34,33 @@ public class EmployeesDao {
         }
     }
 
+    public List<Employee> findAllWithNicknames() {
+        try (EntityManager em = emf.createEntityManager()) {
+            List<Employee> employees = em.createQuery("select e from Employee e", Employee.class).getResultList();
+            for (Employee e: employees) {
+                e.getNicknames().size();
+            }
+            return employees;
+        }
+    }
+
     public Employee findById(long id) {
         try (EntityManager em = emf.createEntityManager()) {
-            System.out.println("first find");
             Employee employee = em.find(Employee.class, id);
-            em.detach(employee);
-            em.clear();
-
-            System.out.println("second find");
-            employee = em.find(Employee.class, id);
-
             return employee;
         }
     }
+
+    public Employee findByIdWithNicknames(long id) {
+        try (EntityManager em = emf.createEntityManager()) {
+            Employee employee = em.find(Employee.class, id);
+            // Azért hívom meg, hogy betöltse a collectiont
+            employee.getNicknames().size();
+            return employee;
+        }
+    }
+
+
 
     public void approve(ApproveCommand command) {
         try (EntityManager em = emf.createEntityManager()) {

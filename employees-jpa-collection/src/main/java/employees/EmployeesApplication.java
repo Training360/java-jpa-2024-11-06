@@ -15,12 +15,18 @@ public class EmployeesApplication {
 
             EmployeesDao employeesDao = new EmployeesDao(entityManagerFactory);
 
-            Employee employee = new Employee("John Doe");
-            employee.setNicknames(List.of("John", "Johnny", "J", "JD"));
-            employeesDao.save(employee);
+            for (int i = 0; i < 10; i++) {
+                Employee employee = new Employee("John Doe " + i);
+                employee.setNicknames(List.of("John", "Johnny", "J", "JD"));
+                employeesDao.save(employee);
+            }
 
-            employee = employeesDao.findById(employee.getId());
+            Employee employee = employeesDao.findByIdWithNicknames(1);
+            System.out.println(employee.getName());
             System.out.println(employee.getNicknames());
+
+            List<Employee> employees = employeesDao.findAllWithNicknames();
+            employees.forEach(e -> System.out.println(e.getNicknames()));
         }
 
     }
