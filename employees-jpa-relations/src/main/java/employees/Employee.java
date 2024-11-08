@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "employees")
+@NamedQuery(name = "Employee.findAll", query = "select e from Employee e")
 public class Employee {
 
     @Id

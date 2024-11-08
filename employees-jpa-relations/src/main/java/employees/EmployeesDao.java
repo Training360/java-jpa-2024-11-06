@@ -32,7 +32,8 @@ public class EmployeesDao {
 
     public List<Employee> findAll() {
         try (EntityManager em = emf.createEntityManager()) {
-            return em.createQuery("select e from Employee e", Employee.class).getResultList();
+//            return em.createQuery("select e from Employee e", Employee.class).getResultList();
+            return em.createNamedQuery("Employee.findAll", Employee.class).getResultList();
         }
     }
 
@@ -52,7 +53,8 @@ public class EmployeesDao {
 
     public Employee findByIdWithPhoneNumbers(long id) {
         try (EntityManager em = emf.createEntityManager()) {
-            return em.createQuery("select e from Employee e left join fetch e.phoneNumbers", Employee.class)
+            return em.createQuery("select e from Employee e left join fetch e.phoneNumbers where e.id = :id", Employee.class)
+                    .setParameter("id", id)
                     .getSingleResult();
         }
     }
@@ -102,6 +104,13 @@ public class EmployeesDao {
             em.persist(phoneNumber);
 
             em.getTransaction().commit();
+        }
+    }
+
+    public List<EmployeeDto> findAllEmployeesDto() {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("select new employees.EmployeeDto(e.id, e.name) from Employee e", EmployeeDto.class)
+                    .getResultList();
         }
     }
 }
